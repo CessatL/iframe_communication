@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+  <head>
+	   <meta http-equiv="content-type" content="text/html; charset=utf-8">
+     <script type="text/javascript">
+function handleEvent (event) {
+	var message = event.data ;
+	var node = parseNode(message);
+  appendNode("body", node);
+
+}
+
+function parseNode(nodeString) {
+   var wrapperNode = document.createElement('div');
+   wrapperNode.innerHTML = nodeString;
+   var tempNode = wrapperNode.children[0];
+   var node = document.createElement(tempNode.nodeName);
+   node.innerHTML = tempNode.innerHTML;
+   for (var attribute in tempNode.attributes) {
+       node.setAttribute(attribute.nodeName, attribute.nodeValue);
+   }
+   return node;
+}
+
+function appendNode(parentTagName, node, onload) {
+   node.onload = onload;
+   var parentNode = document.getElementsByTagName(parentTagName)[0];
+   parentNode.appendChild(node);
+}
+
+if (window.addEventListener) {
+	// For standards-compliant web browsers
+	window.addEventListener("message", handleEvent, false);
+} else {
+	window.attachEvent("onmessage", handleEvent);
+}
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
