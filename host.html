@@ -3,7 +3,7 @@
   <head>
 	  <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <script type="text/javascript">
-      IFRAME_SOURCE = 'file:///Users/b.brodersen/Development/git/iframe_communication/iframe.html';
+      IFRAME_SOURCE = 'iframe.html';
       IFRAME_ID = IFRAME_SOURCE
 
       window.onload = function () {
@@ -12,9 +12,9 @@
         iframe = document.createElement('iframe');
         iframe.id = IFRAME_ID
         iframe.src = IFRAME_SOURCE;
-        iframe.style.display = "none";
-        iframe.width = 1;
-        iframe.height = 1;
+        //iframe.style.display = "none";
+        iframe.width = 150;
+        iframe.height = 150;
 
         document.body.appendChild(iframe);
 
@@ -26,9 +26,16 @@
       };
 
       function postConstruct(){
-        var message = '\<script\>alert(window.location)\</script\>';
 
-        iframeWindow.postMessage(message, "*");
+        iframeWindow.postMessage({
+          type: "script",
+          textContent: "alert('moo')"
+        }, "*");
+
+        iframeWindow.postMessage({
+          type: "img",
+          src: "https://drslash.com/wp-content/uploads/2014/07/Batman5.png"
+        }, "*");
       }
 
     </script>

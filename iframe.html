@@ -4,27 +4,36 @@
 	   <meta http-equiv="content-type" content="text/html; charset=utf-8">
      <script type="text/javascript">
       function handleEvent (event) {
-      	var nodeString = event.data ;
-      	var node = parseNode(nodeString);
-        appendNode("body", node);
+      	var message = event.data ;
+      	switch (message.type) {
+      	  case "script":
+      	    handleScriptMessage(message);
+      	    break;
+          case "img":
+      	    handleImageMessage(message);
+      	    break;
+      	  default:
+
+      	}
       }
 
-      function parseNode(nodeString) {
-         var wrapperNode = document.createElement('div');
-         wrapperNode.innerHTML = nodeString;
-         var tempNode = wrapperNode.children[0];
-         var node = document.createElement(tempNode.nodeName);
-         node.innerHTML = tempNode.innerHTML;
-         for (var attribute in tempNode.attributes) {
-             node.setAttribute(attribute.nodeName, attribute.nodeValue);
-         }
-         return node;
+      function handleScriptMessage(message) {
+         var scriptElement = document.createElement('script');
+         scriptElement.type  = "text/javascript";
+         scriptElement.textContent = message.textContent;
+
+         var bodyElement = document.getElementsByTagName('body')[0];
+         bodyElement.appendChild(scriptElement);
       }
 
-      function appendNode(parentTagName, node, onload) {
-         node.onload = onload;
-         var parentNode = document.getElementsByTagName(parentTagName)[0];
-         parentNode.appendChild(node);
+      function handleImageMessage(message) {
+         var imageElement = document.createElement('img');
+         imageElement.src = message.src;
+         imageElement.width = 100;
+         imageElement.height = 100;
+
+         var bodyElement = document.getElementsByTagName('body')[0];
+         bodyElement.appendChild(imageElement);
       }
 
       if (window.addEventListener) {
